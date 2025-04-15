@@ -1,5 +1,8 @@
 FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu20.04
 
+# 修复链接库的问题
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+
 # 安装基础工具
 RUN export DEBIAN_FRONTEND=noninteractive  && \
     apt-get update -y && \
@@ -21,6 +24,10 @@ RUN export DEBIAN_FRONTEND=noninteractive  && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# 解决 Cannot load cudnn shared library. Cannot invoke method cudnnGetVersion 的错误
+RUN ln -s /usr/lib/x86_64-linux-gnu/libcudnn.so.9 /usr/lib/x86_64-linux-gnu/libcudnn.so && \
+    ln -s /usr/local/cuda-12.4/targets/x86_64-linux/lib/libcublas.so.12 /usr/lib/x86_64-linux-gnu/libcublas.so
+
 # 下载基础模型,避免内网环境下载失败
 RUN mkdir -p /root/.paddleocr/whl/det/ch/ch_PP-OCRv4_det_infer/ && \
     cd /root/.paddleocr/whl/det/ch/ch_PP-OCRv4_det_infer/ && \
@@ -32,7 +39,7 @@ RUN mkdir -p /root/.paddleocr/whl/det/ch/ch_PP-OCRv4_det_infer/ && \
     cd /root/.paddleocr/whl/cls/ch_ppocr_mobile_v2.0_cls_infer/ && \
     wget https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_cls_infer.tar
 
-
+# 安装ocr依赖
 COPY requirements.txt .
 RUN pip3 install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
 
