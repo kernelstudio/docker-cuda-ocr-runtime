@@ -3,10 +3,12 @@ FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu20.04
 # 修复链接库的问题
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
+WORKDIR /app
+
 # 安装基础工具
 RUN export DEBIAN_FRONTEND=noninteractive  && \
     apt-get update -y && \
-    apt-get install wget python3 python3-pip -y && \
+    apt-get install wget python3 python3-pip cmake gcc python3-venv g++ build-essential -y && \
     ln -s /usr/bin/python3 /usr/bin/python
 
 # 安装系统图形库（解决 OpenCV/PyMuPDF 依赖）
@@ -40,6 +42,7 @@ RUN mkdir -p /root/.paddleocr/whl/det/ch/ch_PP-OCRv4_det_infer/ && \
     wget https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_cls_infer.tar
 
 # 安装ocr依赖
+RUN cd /app &&  python3 -m venv .venv && source .venv/bin/activate
 COPY requirements.txt .
 RUN pip3 install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
 
