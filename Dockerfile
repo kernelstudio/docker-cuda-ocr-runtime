@@ -38,10 +38,10 @@ RUN mkdir -p /root/.paddleocr/whl/det/ch/ch_PP-OCRv4_det_infer/ && \
     wget https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_cls_infer.tar
 
 # 安装ocr依赖
-RUN cd /app &&  python3 -m venv .venv && bash .venv/bin/activate
 COPY requirements.txt .
-RUN pip3 install wheel setuptools -i https://mirrors.aliyun.com/pypi/simple/
-RUN pip3 install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
+RUN cd /app &&  \
+    pip3 install wheel setuptools -i https://mirrors.aliyun.com/pypi/simple/ && \
+    pip3 install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
 
 
 # 清理
