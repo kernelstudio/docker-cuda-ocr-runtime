@@ -22,11 +22,6 @@ RUN export DEBIAN_FRONTEND=noninteractive  && \
     libxrender1 \
     libxext6
 
-# 清理
-RUN export DEBIAN_FRONTEND=noninteractive  && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
 # 解决 Cannot load cudnn shared library. Cannot invoke method cudnnGetVersion 的错误
 RUN ln -s /usr/lib/x86_64-linux-gnu/libcudnn.so.9 /usr/lib/x86_64-linux-gnu/libcudnn.so && \
     ln -s /usr/local/cuda-12.4/targets/x86_64-linux/lib/libcublas.so.12 /usr/lib/x86_64-linux-gnu/libcublas.so
@@ -46,6 +41,13 @@ RUN mkdir -p /root/.paddleocr/whl/det/ch/ch_PP-OCRv4_det_infer/ && \
 RUN cd /app &&  python3 -m venv .venv && bash .venv/bin/activate
 COPY requirements.txt .
 RUN pip3 install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
+
+
+# 清理
+RUN export DEBIAN_FRONTEND=noninteractive  && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* \
+    rm -rf /tmp/*
 
 # 设置容器启动时执行的命令
 CMD ["/bin/sh"]
