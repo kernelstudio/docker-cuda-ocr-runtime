@@ -48,7 +48,8 @@ RUN pip3 install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
 RUN export DEBIAN_FRONTEND=noninteractive  && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* \
-    rm -rf /tmp/*
+    rm -rf /tmp/* \
+    rm -rf /root/.cache/pip
 
 # 设置容器启动时执行的命令
 CMD ["/bin/sh"]
