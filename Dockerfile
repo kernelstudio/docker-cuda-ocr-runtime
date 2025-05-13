@@ -40,6 +40,7 @@ RUN mkdir -p /root/.paddleocr/whl/det/ch/ch_PP-OCRv4_det_infer/ && \
 # 安装ocr依赖
 RUN cd /app &&  python3 -m venv .venv && bash .venv/bin/activate
 COPY requirements.txt .
+RUN pip3 install wheel setuptools  -i https://mirrors.aliyun.com/pypi/simple/
 RUN pip3 install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
 
 
