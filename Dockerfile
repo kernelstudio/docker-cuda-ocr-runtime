@@ -2,6 +2,7 @@ FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu20.04
 
 # 修复链接库的问题
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
 
 WORKDIR /app
 
